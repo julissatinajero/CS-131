@@ -1,0 +1,9 @@
+    1  ls
+    2  git version
+    3  cd CS-131/
+    4  ls
+    5  git status
+    6  git checkout -b worksheet1
+    7  mkdir Worksheet1
+    8  cd Worksheet1/
+    9  history > cmds.log
