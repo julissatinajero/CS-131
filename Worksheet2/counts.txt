@@ -1,0 +1,7 @@
+Grep output for verified reviews:
+Line count   Word count
+229346       44402864
+
+Grep output for unverified reviews:
+Line count   Word count
+2876174      505766888
