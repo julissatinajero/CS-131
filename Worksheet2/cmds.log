@@ -1,0 +1,22 @@
+    1  cd Amazon\ Dataset/
+    2  ls
+    3  tail -n 2 amazon_reviews_us_Books_v1_02.tsv
+    4  gunzip amazon_reviews_us_Books_v1_02.tsv.gz
+    5  tail -n 2 amazon_reviews_us_Books_v1_02.tsv
+    6  grep -P '\tN\tY\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw
+    7  grep -P '\tY\tY\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw
+    8  grep -P '\tN\tY\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw > counts.txt
+    9  grep -P '\tY\tY\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw >> counts.txt
+   10  cat counts.txt 
+   11  vi counts.txt 
+   12  cat counts.txt 
+   13  grep -P '\tN\tN\t’ amazon_reviews_us_Books_v1_02.tsv | wc -lw >> counts.txt
+
+   14  cat counts.txt 
+   15  grep -P '\tN\tN\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw
+   16  grep -P '\tN\tN\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw >> counts.txt
+   17  cat counts.txt
+   18  grep -P '\tY\tN\t' amazon_reviews_us_Books_v1_02.tsv | wc -lw >> counts.txt
+   19  cat counts.txt
+   20  vi counts.txt 
+   21  history > cmds.log
