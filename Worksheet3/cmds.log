@@ -1,0 +1,8 @@
+  623  cut -c 4-11 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | head -3
+  624  awk -F '\t' '{print $2}' amazon_reviews_us_Books_v1_02.tsv | sort | uniq -c | sort -nr | head -3
+  625  cut -f4 -d$'\t' amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c | sort -nr| head -3
+  626  awk -F '\t' '{print $4}' amazon_reviews_us_Books_v1_02.tsv | sort | uniq -c | sort -nr | head -3
+  627  awk -F '\t' '$4 == "043935806X"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+  628  awk -F '\t' '$4 == "0439139597"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+  629  awk -F '\t' '$4 == "0525947647"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+  630  history | tail -8 > cmds.log
