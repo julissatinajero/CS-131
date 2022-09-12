@@ -1,0 +1,38 @@
+Script started on 2022-09-12 17:15:21-04:00
+
+Question 1)
+The customers who authored the most reviews were customers with the IDS 50122160, 50732546, 52615377.
+Note: I used both cut and awk commands to check.
+--------------------Script output------------------------
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cut -c 4-11 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | head -3
+  21922 50122160
+   9964 50732546
+   2664 52615377
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ awk -F '\t' '{print $2}' amazon_reviews_us_Books_v1_02.tsv | sort | uniq -c | sort -nr | head -3
+  21922 50122160
+   9964 50732546
+   2664 52615377
+
+
+Question 2)
+The top 3 most reviewed products were Harry Potter and the Order of the Phoenix, Harry Potter And The Goblet Of Fire, and Lies and the Lying Liars Who Tell Them. The corrresponding product IDs are 043935806X, 0439139597, 0525947647.
+Note: I used both cut and awk commands to check the IDs then used awk to get the name of the product.
+--------------------Script output------------------------
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cut -f4 -d$'\t' amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c | sort -nr| head -3
+   4625 043935806X
+   3739 0439139597
+   2666 0525947647
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ awk -F '\t' '{print $4}' amazon_reviews_us_Books_v1_02.tsv | sort | uniq -c | sort -nr | head -3
+   4625 043935806X
+   3739 0439139597
+   2666 0525947647
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ awk -F '\t' '$4 == "043935806X"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+Harry Potter and the Order of the Phoenix (Book 5)
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ awk -F '\t' '$4 == "0439139597"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+Harry Potter And The Goblet Of Fire (Book 4)
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ awk -F '\t' '$4 == "0525947647"{print $6}' amazon_reviews_us_Books_v1_02.tsv | head -1
+Lies and the Lying Liars Who Tell Them
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ history | tail -8 > y[Kw[Kcmds.log
+]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ exit
+
+Script done on 2022-09-12 17:23:04-04:00
