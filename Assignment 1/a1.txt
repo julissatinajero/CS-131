@@ -76,7 +76,7 @@ Inactive(anon):   469824 kB
 
 Question 8)
 Commands: head /proc/cpuinfo, tail /proc/cpuinfo, cat /proc/cpuinfo
-Answer: There are 255 processors on my server. The processor architecture name is POWER8. The processor speed is 3.525 GHz. 
+Answer: There are 256 processors on my server. The processor architecture name is POWER8. The processor speed is 3.525 GHz. 
 --------------Script output------------------
 ]0;julissa@sjsu:~/A1[julissa@sjsu A1]$ head /proc/cpuinfo
 processor	: 0
@@ -112,15 +112,51 @@ downloaded_hashtags_extend.csv  [0m[38;5;33mtemp[0m  [38;5;33mtemp3[0m  [3
  110350  220699 7822180 downloaded_hashtags_extend.csv
 
 Question 10)
-Commands: grep -i "great" downloaded_hashtags_extend.csv | wc -l
-Answer: 57 hashtags contain the word great.
+Commands: grep -i "great" downloaded_hashtags_extend.csv |awk -F ',' '{print $2}' | uniq | wc -l
+Answer: 35 hashtags contain the word great.
 --------------Script output------------------
 ]0;julissa@sjsu:~/A1[julissa@sjsu A1]$ head -3 downloaded_hashtags_extend.csv
 author,hashtags,date,id
 308045021,awesomepeopleontwitter,2022-04-30 23:18:45+00:00,1520543208614334465
 308045021,journalism,2022-04-30 20:40:18+00:00,1520503332246376448
-]0;julissa@sjsu:~/A1[julissa@sjsu A1]$ grep -i "great" downloaded_hashtags_extend.csv | wc -l
-57
+]0;julissa@sjsu:~/A1[julissa@sjsu A1]$ grep -i "great" downloaded_hashtags_extend.csv |awk -F ',' '{print $2}' | uniq | wc -l
+35
+[julissa@sjsu A1]$ grep -i "great" downloaded_hashtags_extend.csv |awk -F ',' '{print $2}' | uniq
+greatday
+thegreatdebate
+thegreattranslationmovement
+thegreatbritishmortgageswindle
+greatblueheron
+greateggcasehunt
+scottythegreatpretender
+greatbritain
+greatergood
+scottythegreatpretender
+greatwallofstupidity
+greatbarringtondeclaration
+greatbarrierreef
+greatreset
+thegreatresist
+ourgreatnationalparks
+maketwittergreatagain
+greatthread
+americasgreatestmistake
+greatdancecrew
+tenxgreatdancecrew
+greatdancecrew
+lovegreatbritain
+greatdancecrew
+greatwesterncatskills
+greatbarrington
+greatwesterncatskills
+greatbarrington
+allcreaturesgreatandsmall
+greatMMMMMM
+thegreat
+greatreset
+thegreatopioidlie
+great
+greatopioidlie
 
 Question 11)
 Command: file downloaded_hashtags_extend.csv  
