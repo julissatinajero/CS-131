@@ -1,0 +1,41 @@
+  784  script ws4.txt
+  785  clear
+  786  vi .bashrc
+  787  . ~/.bashrc
+  788  w
+  789  l
+  790  cd Amazon\ Dataset/
+  791  mkdir CUSTOMERS
+  792  mkdir PRODUCTS
+  793  ls
+  794  head -15 amazon_reviews_us_Books_v1_02.tsv
+  795  clear
+  796  grep -P '\t50732546\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/50732546.txt
+  797  grep -P '\t51964897\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/51964897.txt
+  798  grep -P ‘\t48541186\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/48541186.txt
+
+  799  grep -P '\t48541186\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/48541186.txt
+  800  cd CUSTOMERS/
+  801  ls
+  802  cd ..
+  803  grep -P '\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0385730586.txt
+  804  grep -P '\t0811828964\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0811828964.txt
+  805  grep -P ‘\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0385730586.txt
+  806  grep -P '\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0385730586.txt
+  807  cd PRODUCTS/
+  808  ls
+  809  cd ..
+  810  grep -P '\t1580085695\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/1580085695.txt
+  811  cd PRODUCTS/
+  812  ls
+  813  cd ..
+  814  cd CUSTOMERS/
+  815  count=0; total=0; for i in $(awk '{print $1;}' 50732546.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  816  count=0; total=0; for i in $(awk '{print $1;}' 51964897.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  817  count=0; total=0; for i in $(awk '{print $1;}' 48541186.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  818  cd ..
+  819  cd PRODUCTS/
+  820  count=0; total=0; for i in $(awk '{print $1;}' 0385730586.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  821  count=0; total=0; for i in $(awk '{print $1;}' 0811828964.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  822  count=0; total=0; for i in $(awk '{print $1;}' 1580085695.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
+  823  history > cmds.log
