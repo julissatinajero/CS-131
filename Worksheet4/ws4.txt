@@ -4,33 +4,31 @@ Script started on 2022-09-25 20:47:13-04:00
 TASK 1) Create aliases
 Commands: vi .bashrc, alias l='ls -latr', alias w='ls -la|wc', . ~/.bashrc
 -------------------Script output-------------------
-]0;julissa@sjsu:~[julissa@sjsu ~]$ vi .bashrc
-[?2004h[?1049h[22;0;0t[?1h=[?2004h[1;35r[?12h[?12l[27m[23m[29m[m[H[2J[?25l[35;1H".bashrc" 20L, 415C[2;1H▽[6n[2;1H  [1;1H[>c]10;?]11;?[1;1H[34m# .bashrc
+julissa@sjsu:~[julissa@sjsu ~]$ vi .bashrc
+# .bashrc
 
-# Source global definitions[m
-[38;5;130mif [[m [38;5;130m-f[m /etc/bashrc [38;5;130m];[m [38;5;130mthen
-        . [m/etc/bashrc
-[38;5;130mfi[m
-
-[34m# User specific environment[m
-[38;5;130mif ![m [35m[[[m [38;5;130m"[m[35m$PATH[m[38;5;130m"[m [38;5;130m=~[m [38;5;130m"[m[35m$HOME[m[31m/.local/bin:[m[35m$HOME[m[31m/bin:[m[38;5;130m"[m [35m]][m
-[38;5;130mthen[m
-    [35mPATH[m[38;5;130m="[m[35m$HOME[m[31m/.local/bin:[m[35m$HOME[m[31m/bin:[m[35m$PATH[m[38;5;130m"
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
 fi
-export[m[36m PATH[m
 
-[34m# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions[m
-[38;5;130malias[m [36ml[m=[38;5;130m'[m[31mls -latr;
-alias w=[m[38;5;130m'ls[m [35m-la[m|wc[38;5;130m'[m
-[94m~                                                                                                                                           [22;1H~                                                                                                                                           [23;1H~                                                                                                                                           [24;1H~                                                                                                                                           [25;1H~                                                                                                                                           [26;1H~                                                                                                                                           [27;1H~                                                                                                                                           [28;1H~                                                                                                                                           [29;1H~                                                                                                                                           [30;1H~                                                                                                                                           [31;1H~                                                                                                                                           [32;1H~                                                                                                                                           [33;1H~                                                                                                                                           [34;1H~                                                                                                                                           [m[35;123H20,19[9CAll[20;19H[?25h[?25l[35;113H~@k[20;19H[35;113H   [20;19H[?25h[?25l[35;113Hi[20;19H[35;113H [20;19H[35;1H[1m-- INSERT --[m[35;13H[K[35;123H20,19[9CAll[20;19H[?25h[?25l[35;126H20[20;20H[?25h[?25l[35;123H19,19[19;19H[?25h[?25l[35;127H8[19;18H[?25h[?25l[35;127H9[19;19H[?25h[?25l[19;18H[K[35;127H8[19;18H[?25h[?25l[38;5;130m'
-alias[m [36mw[m=[1C[31mls -la|wc[m[35;127H9[19;19H[?25h[?25l[35;123H20[20;19H[?25h[?25l[35;126H20[20;20H[?25h[35;1H[K[20;19H[?25l[35;113H^[[20;19H[35;113H  [20;20H[35;123H20,19[9CAll[20;19H[?25h[?25l[35;113H:[20;19H[35;113H[K[35;1H:[?2004h[?25hw[?25l[?25hq[?25l[?25h[?25l[?2004l".bashrc" 20L, 415C written
-[?2004l[?1l>[?25h[?1049l[23;0;0t]0;julissa@sjsu:~[julissa@sjsu ~]$ . ~/.bashrc
-]0;julissa@sjsu:~[julissa@sjsu ~]$ w
+alias l='ls -latr'
+alias w='ls -la|w'
+julissa@sjsu:~[julissa@sjsu ~]$ . ~/.bashrc
+julissa@sjsu:~[julissa@sjsu ~]$ w
      14     120     775
-]0;julissa@sjsu:~[julissa@sjsu ~]$ l
+julissa@sjsu:~[julissa@sjsu ~]$ l
 total 60
 -rw-r--r--   1 julissa julissa   172 Feb  6  2020  .kshrc
 -rw-r--r--   1 julissa julissa   141 Sep 30  2021  .bash_profile
@@ -45,16 +43,16 @@ drwxrwxr-x   2 julissa julissa    47 Sep 25 20:37 [38;5;33m'Amazon Dataset'[0m
 -rw-------   1 julissa julissa 11905 Sep 25 20:47  .viminfo
 -rw-r--r--   1 julissa julissa   415 Sep 25 20:47  .bashrc
 drwx------   5 julissa julissa   194 Sep 25 20:47  [38;5;33m.[0m
-]0;julissa@sjsu:~[julissa@sjsu ~]$ cd Amazon\ Dataset/
+julissa@sjsu:~[julissa@sjsu ~]$ cd Amazon\ Dataset/
 
 
 TASK 2) Make Directories
 Commands: mkdir CUSTOMERS, mkdir PRODUCTS
 -------------------Script output-------------------
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ mkdir PRODUCTS
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ ls
-amazon_reviews_us_Books_v1_02.tsv  [0m[38;5;33mCUSTOMERS[0m  [38;5;33mPRODUCTS[0m
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ mkdir PRODUCTS
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ ls
+amazon_reviews_us_Books_v1_02.tsv  CUSTOMERS  PRODUCTS
 
 
 TASK 3) Choose 3 customer IDs and redirect the helpfulness scores
@@ -63,15 +61,15 @@ grep -P '\t50732546\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/5
 grep -P '\t51964897\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/51964897.txt
 grep -P '\t48541186\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/48541186.txt
 -------------------Script output-------------------
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ head -15 amazon_reviews_us_Books_v1_02.tsv
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ clear
-[3J[H[2J]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t50732546\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/50732546.txt
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t51964897\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/51964897.txt
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t48541186\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/48541186.txt
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ CD[K[Kcd CUSTOMERS/
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ ls
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ head -15 amazon_reviews_us_Books_v1_02.tsv
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ clear
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t50732546\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/50732546.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t51964897\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/51964897.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t48541186\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > CUSTOMERS/48541186.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ ls
 48541186.txt  50732546.txt  51964897.txt
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ cd ..
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ cd ..
 
 
 TASK 3) Choose 3 product IDs and redirect the helpfulness scores
@@ -80,13 +78,13 @@ grep -P '\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/
 grep -P '\t0811828964\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0811828964.txt
 grep -P '\t1580085695\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/1580085695.txt
 -------------------Script output-------------------
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0385730586.txt
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ rep -P '\t0811828964\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0811828964.txt[1@g
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t1580085695\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/1580085695.txt
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd PRODUCTS/
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ ls
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t0385730586\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0385730586.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t0811828964\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/0811828964.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ grep -P '\t1580085695\t' amazon_reviews_us_Books_v1_02.tsv | cut -f9 > PRODUCTS/1580085695.txt
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd PRODUCTS/
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ ls
 0385730586.txt  0811828964.txt  1580085695.txt
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ cd ..
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ cd ..
 
 
 TASK 4) Compute the mean (Customer IDs)
@@ -95,14 +93,14 @@ count=0; total=0; for i in $(awk '{print $1;}' 50732546.txt); do total=$(echo $t
 count=0; total=0; for i in $(awk '{print $1;}' 51964897.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 count=0; total=0; for i in $(awk '{print $1;}' 48541186.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 -------------------Script output-------------------
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 50732546.txt); do total=$(echo $total+$i | bc ); ((count++)); done;  echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 50732546.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 5.85
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 51964897.txt); do total=$(echo $total+$i | bc ); ((count++)); done;  echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 51964897.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 31.62
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 48541186.txt); do total=$(echo $total+$i | bc ); ((count++)); done;  echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ count=0; total=0; for i in $(awk '{print $1;}' 48541186.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 16.00
-]0;julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ cd ..
+julissa@sjsu:~/Amazon Dataset/CUSTOMERS[julissa@sjsu CUSTOMERS]$ cd ..
 
 
 TASK 4) Compute the mean (Product IDs)
@@ -111,14 +109,14 @@ count=0; total=0; for i in $(awk '{print $1;}' 0385730586.txt); do total=$(echo 
 count=0; total=0; for i in $(awk '{print $1;}' 0811828964.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 count=0; total=0; for i in $(awk '{print $1;}' 1580085695.txt); do total=$(echo $total+$i | bc ); ((count++)); done; echo "scale=2; $total / $count" | bc
 -------------------Script output-------------------
-]0;julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd PRODUCTS/
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 0385730586.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset[julissa@sjsu Amazon Dataset]$ cd PRODUCTS/
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 0385730586.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
 1.86
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 0811828964.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 0811828964.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
 3.60
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 1580085695.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ count=0; total=0; for i in $(awk '{print $1;}' 1580085695.txt); do total=$(echo $total+$i | bc ); ((count++)); done;; echo "scale=2; $total / $count" | bc
 4.53
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ history > cmds.log
-]0;julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ exit
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ history > cmds.log
+julissa@sjsu:~/Amazon Dataset/PRODUCTS[julissa@sjsu PRODUCTS]$ exit
 
 Script done on 2022-09-25 21:04:53-04:00
