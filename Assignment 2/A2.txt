@@ -1,0 +1,213 @@
+Script started on 2022-09-28 00:48:02-04:00
+
+
+QUESTION 0)
+MS-excel doesn't get confused by the newlines and displays the tweet text in a single row because it prefixes(starts) and suffixes(ends) each field with quotations. To fix this issue, I could create a formula in excel that removes the newlines. I could substitute the newline character with a space.
+
+
+
+Note: After downloading the files and turning UTF8 to ASCII, I removed the 'bots' (user ids that matched the in_reply_to_user_id). Professor mentioned to do this during class and this is the data I worked with in the assignment.
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ head -2 downloaded_tweets_extend_nolf2.tsv 
+id	author	date	hashtags	referenced	in_reply_to_user_id	public_metrics	text_nolf
+1520543208614334465	308045021	2022-04-30 23:18:45+00:00	awesomePeopleOnTwitter				"On top of the chocolate, @benjean2 also included these for my Spanish learning child. I have another child going into Spanish for 2 years and these books, lovingly given, will be out to good use. I hope my kids will be worthy of her kindness. ❤️ #awesomePeopleOnTwitter https://t.co/rGiSjqZXoe"
+[julissa@sjsu A2]$ awk -F '\t' '$2 != $6 {print}' downloaded_tweets_extend_original_nolf2.tsv > downloaded_tweets_extend_original_NoBots.tsv
+[julissa@sjsu A2]$ awk -F '\t' '$2 != $6 {print}' downloaded_tweets_extend_nolf2.tsv > downloaded_tweets_extend_NoBots.tsv
+[julissa@sjsu A2]$ ls
+A2.txt  downloaded_tweets_extend_NoBots.tsv  downloaded_tweets_extend_nolf2.tsv  downloaded_tweets_extend_original_NoBots.tsv  downloaded_tweets_extend_original_nolf2.tsv
+
+
+
+QUESTION 1) Find the top 10 users who replied the most to other users
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ && $6 != "" {print $2}' downloaded_tweets_extend_original_NoBots.tsv | sort | uniq -c | sort -nr | head -10
+     28 1387010761994682371
+     19 1573800344
+     17 1921951394
+     16 1240682348120866816
+     14 94350709
+     14 940778288871542786
+     11 29447428
+     10 90107770
+     10 1401861298233647106
+      9 4830874006
+
+
+
+QUESTION 2) Find the top 10 users who got the most replies from other users
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ && $6 != "" {print $6}'  downloaded_tweets_extend_original_NoBots.tsv | sort | uniq -c | sort -nr | head -10
+     45 3453306553
+     27 29447428
+     14 1238370241169616897
+     13 1108565574
+     12 19739126
+     11 21525682
+     10 95091601
+     10 48624704
+     10 1462548977367359490
+      9 26217297
+
+
+
+QUESTION 3) Find the top 10 users who retweeted the most other tweets
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=retweeted/ {print $2}' downloaded_tweets_extend_NoBots.tsv | sort | uniq -c | sort -nr | head -10
+   2065 45379403
+   1678 77726331
+   1641 870244616003403781
+   1582 1028022611324747776
+   1312 711608180535640064
+   1281 139109800
+   1234 177400353
+   1216 832019161454817280
+   1159 29447428
+   1139 1060440219097423872
+
+
+
+QUESTION 5) Find the 30 hashtags used most frequently overall for anything
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ cut -f4 -d$'\t' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
+   2895 ukraine
+   1924 covid19
+   1314 longcovid
+   1137 russia
+    897 followbackfriday
+    895 fbpe
+    794 standwithukraine
+    536 putinhitler
+    479 omicron
+    475 russian
+    448 covid
+    429 breaking
+    423 putin
+    384 auspol
+    383 ableg
+    358 mariupol
+    351 kyiv
+    342 bcpoli
+    328 covidisairborne
+    308 stopputinnow
+    302 pmqs
+    295 partygate
+    285 genocide
+    280 เจ้าแก้มก้อน
+    274 putinwarcriminal
+    266 ottawa
+    263 russiasanctions
+    260 boycottrussia
+    257 cdnpoli
+    256 onpoli
+
+
+
+QUESTION 6) Find the 30 hashtags that got retweeted the most
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=retweeted/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
+   2563 ukraine
+   1334 covid19
+   1151 longcovid
+   1053 russia
+    425 breaking
+    412 russian
+    368 auspol
+    355 omicron
+    329 kyiv
+    319 covid
+    289 mariupol
+    274 เจ้าแก้มก้อน
+    247 standwithukraine
+    246 putin
+    243 ba2
+    239 fluke_natouch
+    220 ukrainian
+    198 pmqs
+    182 partygate
+    182 ableg
+    128 kharkiv
+    125 covidisairborne
+    124 england
+    123 cdnpoli
+    121 โอห์มไง
+    119 anonymous
+    118 insiders
+    116 ukrainerussiawar
+    115 nato
+    114 uk
+
+
+
+
+QUESTION 7) Find the 30 hashtags that got replied the most
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
+    883 fbpe
+    876 followbackfriday
+    429 putinhitler
+    319 standwithukraine
+    280 covid19
+    216 stopputinnow
+    211 russiasanctions
+    207 boycottrussia
+    191 putinwarcriminal
+    178 bcpoli
+    142 ottawa
+    127 bced
+    122 covid19bc
+    121 genocide
+    107 nevervoteconservative
+    106 boycottatp
+    101 onpoli
+     99 longcovid
+     93 ukraine
+     92 votefordout
+     87 covidisairborne
+     85 apartheid
+     84 climatecrisis
+     76 putin
+     72 canada
+     62 cdnpoli
+     61 n95
+     58 ontario
+     58 maskup
+     55 omicron
+
+
+
+QUESTION 8) Find the 30 hashtags that got quoted the most
+---------------------Script output-------------------------
+[julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=quoted/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
+    241 covid19
+    151 standwithukraine
+    140 votefordout
+    124 ableg
+    119 covid19ab
+    115 genocide
+    105 onpoli
+    100 nevervoteconservative
+     93 bcpoli
+     86 covidisairborne
+     84 ukraine
+     78 maskmandate
+     74 ontario
+     68 covid19bc
+     65 maskup
+     64 putin
+     64 bds
+     60 putinhitler
+     59 cdnpoli
+     57 ottawa
+     57 longcovid
+     56 canada
+     54 bced
+     53 covidisnotover
+     53 covid
+     51 omicron
+     49 vote
+     47 putinwarcriminal
+     46 votethemallout2022
+     46 freepalestine
+[julissa@sjsu A2]$ exit
+
+Script done on 2022-09-28 01:15:44-04:00
