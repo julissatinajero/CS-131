@@ -1,5 +1,8 @@
 Script started on 2022-09-25 20:47:13-04:00
 
+Note: I referenced this website for the commands used in Task 4: 
+https://linuxconfig.org/calculate-column-average-using-bash-shell
+
 
 TASK 1) Create aliases
 Commands: vi .bashrc, alias l='ls -latr', alias w='ls -la|wc', . ~/.bashrc
