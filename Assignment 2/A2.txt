@@ -2,11 +2,13 @@ Script started on 2022-09-28 00:48:02-04:00
 
 
 QUESTION 0)
-MS-excel doesn't get confused by the newlines and displays the tweet text in a single row because it prefixes(starts) and suffixes(ends) each field with quotations. To fix this issue, I could create a formula in excel that removes the newlines. I could substitute the newline character with a space.
+MS-excel doesn't get confused by the newlines and displays the tweet text in a single row because it prefixes(starts) and suffixes(ends)
+each field with quotations. To fix this issue, I could create a formula in excel that removes the newlines. I could substitute the 
+newline character with a space.
 
 
-
-Note: After downloading the files and turning UTF8 to ASCII, I removed the 'bots' (user ids that matched the in_reply_to_user_id). Professor mentioned to do this during class and this is the data I worked with in the assignment.
+Note: After downloading the files and turning UTF8 to ASCII, I removed the 'bots' (user ids that matched the in_reply_to_user_id).
+Professor mentioned to do this during class and this is the data I worked with in the assignment.
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ head -2 downloaded_tweets_extend_nolf2.tsv 
 id	author	date	hashtags	referenced	in_reply_to_user_id	public_metrics	text_nolf
@@ -17,8 +19,12 @@ id	author	date	hashtags	referenced	in_reply_to_user_id	public_metrics	text_nolf
 A2.txt  downloaded_tweets_extend_NoBots.tsv  downloaded_tweets_extend_nolf2.tsv  downloaded_tweets_extend_original_NoBots.tsv  downloaded_tweets_extend_original_nolf2.tsv
 
 
-
 QUESTION 1) Find the top 10 users who replied the most to other users
+	awk command: check for 'replied_to' in the fifth('refereced') column
+	sort: sort the user ids in order
+	uniq -c: count unique user ids
+	sort -nr: sort in reverse order (high to low)
+	head -10: print out the top 10
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ && $6 != "" {print $2}' downloaded_tweets_extend_original_NoBots.tsv | sort | uniq -c | sort -nr | head -10
      28 1387010761994682371
@@ -33,8 +39,12 @@ QUESTION 1) Find the top 10 users who replied the most to other users
       9 4830874006
 
 
-
 QUESTION 2) Find the top 10 users who got the most replies from other users
+	awk command: check for 'replied_to' in the fifth('refereced') column
+        sort: sort the in_reply_to_user_ids in order
+        uniq -c: count unique ids
+        sort -nr: sort in reverse order (high to low)
+        head -10: print out the top 10
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ && $6 != "" {print $6}'  downloaded_tweets_extend_original_NoBots.tsv | sort | uniq -c | sort -nr | head -10
      45 3453306553
@@ -49,8 +59,12 @@ QUESTION 2) Find the top 10 users who got the most replies from other users
       9 26217297
 
 
-
 QUESTION 3) Find the top 10 users who retweeted the most other tweets
+	awk command: check for 'retweeted' in the fifth('refereced') column
+        sort: sort the user ids in order
+        uniq -c: count unique user ids
+        sort -nr: sort in reverse order (high to low)
+        head -10: print out the top 10
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=retweeted/ {print $2}' downloaded_tweets_extend_NoBots.tsv | sort | uniq -c | sort -nr | head -10
    2065 45379403
@@ -65,8 +79,13 @@ QUESTION 3) Find the top 10 users who retweeted the most other tweets
    1139 1060440219097423872
 
 
-
 QUESTION 5) Find the 30 hashtags used most frequently overall for anything
+	cut command: cut the fourth('hashtags') column
+	tr -d '"': remove quotations
+	tr ',' '\n': replace commas with newlines
+	sed '/^$/d': remove whitespace
+	tr  [:upper:] [:lower:]: ensure all hashtags are lowercase
+	sort, count, and print
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ cut -f4 -d$'\t' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
    2895 ukraine
@@ -101,8 +120,13 @@ QUESTION 5) Find the 30 hashtags used most frequently overall for anything
     256 onpoli
 
 
-
 QUESTION 6) Find the 30 hashtags that got retweeted the most
+	awk command: check for 'retweeted' in the fifth('refereced') column and print those hashtags
+        tr -d '"': remove quotations
+        tr ',' '\n': replace commas with newlines
+        sed '/^$/d': remove whitespace
+        tr  [:upper:] [:lower:]: ensure all hashtags are lowercase
+        sort, count, and print
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=retweeted/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
    2563 ukraine
@@ -137,9 +161,13 @@ QUESTION 6) Find the 30 hashtags that got retweeted the most
     114 uk
 
 
-
-
 QUESTION 7) Find the 30 hashtags that got replied the most
+	awk command: check for 'replied_to' in the fifth('refereced') column and print those hashtags
+        tr -d '"': remove quotations
+        tr ',' '\n': replace commas with newlines
+        sed '/^$/d': remove whitespace
+        tr  [:upper:] [:lower:]: ensure all hashtags are lowercase
+        sort, count, and print
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=replied_to/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
     883 fbpe
@@ -174,8 +202,13 @@ QUESTION 7) Find the 30 hashtags that got replied the most
      55 omicron
 
 
-
 QUESTION 8) Find the 30 hashtags that got quoted the most
+	awk command: check for 'quoted' in the fifth('refereced') column and print those hashtags
+        tr -d '"': remove quotations
+        tr ',' '\n': replace commas with newlines
+        sed '/^$/d': remove whitespace
+        tr  [:upper:] [:lower:]: ensure all hashtags are lowercase
+        sort, count, and print
 ---------------------Script output-------------------------
 [julissa@sjsu A2]$ awk -F '\t' '$5 ~ /type=quoted/ {print $4}' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30
     241 covid19
