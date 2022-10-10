@@ -4,6 +4,10 @@ marketplace	customer_id	review_id	product_id	product_parent	product_title	produc
 [julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS
 [julissa@sjsu Amazon Dataset]$ ls
 amazon_reviews_us_Books_v1_02.tsv  CUSTOMERS  ws5.txt
+
+
+Create a file (topCustomers.txt) that contains the IDs of the top 1000 customers that made the most reviews.
+---------------------Script output-------------------------
 [julissa@sjsu Amazon Dataset]$ cut -f2 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | awk -F " " '{print $2}' | head -1000 > topCustomers.txt
 [julissa@sjsu Amazon Dataset]$ head -5 topCustomers.txt 
 50122160
@@ -11,6 +15,11 @@ amazon_reviews_us_Books_v1_02.tsv  CUSTOMERS  ws5.txt
 52615377
 45041039
 50776149
+
+
+Inner awk command will print each review_id made by the customers in topCustomers.txt.
+The for loop creates a txt file for each review_id and places it in the CUSTOMERS directory.
+---------------------Script output-------------------------
 [julissa@sjsu Amazon Dataset]$ for i in `awk 'NR==FNR{a[$1]++; next}{if($2 in a){print $3}}' topCustomers.txt amazon_reviews_us_Books_v1_02.tsv`; do touch CUSTOMERS/$i.txt; done
 [julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
 [julissa@sjsu CUSTOMERS]$ ls -U | head -10
