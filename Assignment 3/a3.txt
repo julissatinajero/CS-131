@@ -1,0 +1,301 @@
+Script started on 2022-10-09 21:39:27-04:00
+
+Note: In A2, I removed bots from the original tsv files. I added "NoBots" to the name of the file and used it for this assignment.
+
+
+QUESTION 1)
+I created a csv file called 'replies_data' which represents the directed graph.
+A_ID is the user who got a reply.
+B_ID is the user who made the reply. 
+---------------------Script output-------------------------
+[julissa@sjsu A3]$ ls
+a3.txt  downloaded_tweets_extend_NoBots.tsv  downloaded_tweets_extend_original_NoBots.tsv
+[julissa@sjsu A3]$ echo 'A_ID,B_ID' > replies_data.csv
+[julissa@sjsu A3]$ grep replied_to downloaded_tweets_extend_original_NoBots.tsv | awk -F '\t' '{print $6 "," $2}' >> replies_data.csv
+[julissa@sjsu A3]$ head -5 replies_data.csv 
+A_ID,B_ID
+807095,73452506
+621533,2147604445
+209584092,888042960549552129
+1066744429854236672,2748061373
+[julissa@sjsu A3]$ 
+
+
+QUESTION 2)
+I used an awk command to create 'search_file' which contains the A_IDs that got 3 or more replies.
+I used fgrep -f command to extract those users from the 'replies_data.csv', sort them, and place them in 'replies_subset_data.csv'  
+---------------------Script output-------------------------
+[julissa@sjsu A3]$ awk -F ',' '{print $1}' replies_data.csv | sort | uniq -c | awk '$1>=3{print $2 ","}' > search_file.txt
+[julissa@sjsu A3]$ head -5 search_file.txt 
+1005846500583321601,
+1031000589054828544,
+1073606435580325889,
+1080844782,
+1094971056358637568,
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ fgrep -f search_file.txt replies_data.csv | sort > replies_subset_data.csv
+[julissa@sjsu A3]$ head -10 replies_subset_data.csv 
+1005846500583321601,1020789978639536128
+1005846500583321601,1364615480124846086
+1005846500583321601,22875032
+1005846500583321601,797406769
+1031000589054828544,1089045346242576385
+1031000589054828544,1881185678
+1031000589054828544,3423997089
+1073606435580325889,1387010761994682371
+1073606435580325889,303324434
+1073606435580325889,875612784863531008
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$
+
+
+QUESTION 3)
+I used awk command to extract A_ID from 'replies_subset_data.csv', count unique instances, sort them and do a final unique count.
+That way, 'histogram_data.txt' contains a count for each cluster size starting at 3.
+Then, I used gnuplot to create the histogram of the data.
+---------------------Script output------------------------- 
+[julissa@sjsu A3]$ awk -F ',' '{print $1}' replies_subset_data.csv | uniq -c | sort -k1 -n -t, | awk -F " " '{print $1}' | uniq -c > histogram_data.txt
+[julissa@sjsu A3]$ cat histogram_data.txt 
+     53 3
+     25 4
+      7 5
+      8 6
+      2 7
+      5 8
+      3 9
+      3 10
+      1 11
+      1 12
+      1 13
+      1 14
+      1 27
+      1 45
+[julissa@sjsu A3]$ /etc/gnuplot-5.4.4/src/gnuplot
+
+	G N U P L O T
+	Version 5.4 patchlevel 4    last modified 2022-07-10 
+
+	Copyright (C) 1986-1993, 1998, 2004, 2007-2022
+	Thomas Williams, Colin Kelley and many others
+
+	gnuplot home:     http://www.gnuplot.info
+	faq, bugs, etc:   type "help FAQ"
+	immediate help:   type "help"  (plot window: hit 'h')
+
+Terminal type is now 'unknown'
+gnuplot> set terminal svg
+
+Terminal type is now 'svg'
+Options are 'size 600,480 fixed enhanced font 'Arial,12' butt dashlength 1.0 '
+gnuplot> set output "clusterInfo.svg"
+gnuplot> set style data histograms
+gnuplot> set xlabel "Cluster size"
+gnuplot> set ylabel "Number  of clusters"
+gnuplot> plot './histogram_data.txt' using 1:xtic(2)
+gnuplot> 
+[julissa@sjsu A3]$ ls
+a3.txt           downloaded_tweets_extend_NoBots.tsv           histogram_data.txt  replies_subset_data.csv
+clusterInfo.svg  downloaded_tweets_extend_original_NoBots.tsv  replies_data.csv    search_file.txt
+
+
+QUESTION 4)
+I created a file ('received_3_or_more_replies.txt') that would help me fgrep those users from the original tsv.
+If that user was replied to, I cut the hashtag column out, cleaned the data (remove commas, lowercase, etc), and stored the
+top 30 hastags in 'cluster_top30Hashtags.txt'.
+I reused the command from Assignment 2 to store the top 30 overall hashtags in 'overall_top30Hashtags.txt'
+I then sorted the hashtags from both files and used the comm command to compare the hashtags in both files.
+
+ANALYSIS:
+Hashtags contained in both:
+	ableg
+	auspol
+	covid 
+	covid19 
+	longcovid 
+	russia 
+	standwithukraine 
+	ukraine 
+	เจ้าแก้มก้อน
+Hashtags found in the clusters group top 30 but not in the overall top 30:
+	alboforpm 
+	australia 
+	ausvotes 
+	ausvotes2022 
+	bccrss 
+	brexit 
+	covidisnotover 
+	diemaskebleibtauf 
+	gutlessscomo 
+	johnsonoutday25 
+	lauterbachbleibt 
+	lemmmmmmrip 
+	lnp 
+	lnpcorruptionparty 
+	lnpdisgrace 
+	morrison 
+	scottythefailure 
+	votebluetosaveamerica 
+	votefordout2022 
+	votejoshout 
+	wirwollenmaskenpflicht
+
+---------------------Script output-------------------------
+[julissa@sjsu A3]$ awk  -F ',' '{print "replied_to]\t"$1}' search_file.txt > received_3_or_more_replies.txt
+[julissa@sjsu A3]$ head -5 received_3_or_more_replies.txt 
+replied_to]	1005846500583321601
+replied_to]	1031000589054828544
+replied_to]	1073606435580325889
+replied_to]	1080844782
+replied_to]	1094971056358637568
+[julissa@sjsu A3]$ fgrep -f received_3_or_more_replies.txt downloaded_tweets_extend_original_NoBots.tsv | cut -f4 -d$'\t' | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr |head -30 > cluster_top30Hashtags.txt
+[julissa@sjsu A3]$ head -5 cluster_top30Hashtags.txt 
+     75 auspol
+     15 ukraine
+     15 longcovid
+     15 covid19
+     15 alboforpm
+[julissa@sjsu A3]$ cut -f4 -d$'\t' downloaded_tweets_extend_NoBots.tsv | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr | head -30 > overall_top30Hashtags.txt
+[julissa@sjsu A3]$ head -5 overall_top30Hashtags.txt 
+   2895 ukraine
+   1924 covid19
+   1314 longcovid
+   1137 russia
+    897 followbackfriday
+[julissa@sjsu A3]$ awk -F " " '{print $2}' cluster_top30Hashtags.txt | sort > cluster.txt
+[julissa@sjsu A3]$ head -5 cluster.txt 
+ableg
+alboforpm
+auspol
+australia
+ausvotes
+[julissa@sjsu A3]$ awk -F " " '{print $2}' overall_top30Hashtags.txt | sort > overall.txt
+[julissa@sjsu A3]$ head -5 overall.txt 
+ableg
+auspol
+bcpoli
+boycottrussia
+breaking
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ cat cluster.txt
+ableg
+alboforpm
+auspol
+australia
+ausvotes
+ausvotes2022
+bccrss
+brexit
+covid
+covid19
+covidisnotover
+diemaskebleibtauf
+gutlessscomo
+johnsonoutday25
+lauterbachbleibt
+lemmmmmmrip
+lnp
+lnpcorruptionparty
+lnpdisgrace
+longcovid
+morrison
+russia
+scottythefailure
+standwithukraine
+ukraine
+votebluetosaveamerica
+votefordout2022
+votejoshout
+wirwollenmaskenpflicht
+เจ้าแก้มก้อน
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ cat overall.txt
+ableg
+auspol
+bcpoli
+boycottrussia
+breaking
+cdnpoli
+covid
+covid19
+covidisairborne
+fbpe
+followbackfriday
+genocide
+kyiv
+longcovid
+mariupol
+omicron
+onpoli
+ottawa
+partygate
+pmqs
+putin
+putinhitler
+putinwarcriminal
+russia
+russian
+russiasanctions
+standwithukraine
+stopputinnow
+ukraine
+เจ้าแก้มก้อน
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ 
+[julissa@sjsu A3]$ comm cluster.txt overall.txt
+		ableg
+alboforpm
+		auspol
+australia
+ausvotes
+ausvotes2022
+bccrss
+	bcpoli
+	boycottrussia
+	breaking
+brexit
+	cdnpoli
+		covid
+		covid19
+	covidisairborne
+covidisnotover
+diemaskebleibtauf
+	fbpe
+	followbackfriday
+	genocide
+gutlessscomo
+johnsonoutday25
+	kyiv
+lauterbachbleibt
+lemmmmmmrip
+lnp
+lnpcorruptionparty
+lnpdisgrace
+		longcovid
+	mariupol
+morrison
+	omicron
+	onpoli
+	ottawa
+	partygate
+	pmqs
+	putin
+	putinhitler
+	putinwarcriminal
+		russia
+	russian
+	russiasanctions
+scottythefailure
+		standwithukraine
+	stopputinnow
+		ukraine
+votebluetosaveamerica
+votefordout2022
+votejoshout
+wirwollenmaskenpflicht
+		เจ้าแก้มก้อน
+[julissa@sjsu A3]$ exit
+
+Script done on 2022-10-09 22:02:07-04:00
