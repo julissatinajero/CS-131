@@ -1,0 +1,9 @@
+ 1001  head -1 amazon_reviews_us_Books_v1_02.tsv 
+ 1002  mkdir CUSTOMERS
+ 1003  ls
+ 1004  cut -f2 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | awk -F " " '{print $2}' | head -1000 > topCustomers.txt
+ 1005  head -5 topCustomers.txt 
+ 1006  for i in `awk 'NR==FNR{a[$1]++; next}{if($2 in a){print $3}}' topCustomers.txt amazon_reviews_us_Books_v1_02.tsv`; do touch CUSTOMERS/$i.txt; done
+ 1007  cd CUSTOMERS/
+ 1008  ls -U | head -10
+ 1009  history > cmds.log

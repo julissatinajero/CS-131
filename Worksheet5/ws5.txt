@@ -1,0 +1,34 @@
+Script started on 2022-10-10 17:41:07-04:00
+[julissa@sjsu Amazon Dataset]$ head -1 amazon_reviews_us_Books_v1_02.tsv 
+marketplace	customer_id	review_id	product_id	product_parent	product_title	product_category	star_rating	helpful_votes	total_votes	vine	verified_purchase	review_headline	review_body	review_date
+[julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS
+[julissa@sjsu Amazon Dataset]$ ls
+amazon_reviews_us_Books_v1_02.tsv  CUSTOMERS  ws5.txt
+[julissa@sjsu Amazon Dataset]$ cut -f2 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | awk -F " " '{print $2}' | head -1000 > topCustomers.txt
+[julissa@sjsu Amazon Dataset]$ head -5 topCustomers.txt 
+50122160
+50732546
+52615377
+45041039
+50776149
+[julissa@sjsu Amazon Dataset]$ for i in `awk 'NR==FNR{a[$1]++; next}{if($2 in a){print $3}}' topCustomers.txt amazon_reviews_us_Books_v1_02.tsv`; do touch CUSTOMERS/$i.txt; done
+[julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
+[julissa@sjsu CUSTOMERS]$ ls -U | head -10
+RATOTLA3OF70O.txt
+R17026W0TBFZGL.txt
+R2W8C8DO33WTMP.txt
+RX6OWUF8EFZ72.txt
+R3NA5HUBCL94XV.txt
+R1OPUF771LL5O5.txt
+R27IOQ5TGEH30N.txt
+R3THZWOBS1086J.txt
+R2Q29SBAEO8YOH.txt
+R2D4XQKH128F3O.txt
+[julissa@sjsu CUSTOMERS]$ history > cmds.log
+[julissa@sjsu CUSTOMERS]$ mv cmds.log ..
+[julissa@sjsu CUSTOMERS]$ cd ..
+[julissa@sjsu Amazon Dataset]$ ls
+amazon_reviews_us_Books_v1_02.tsv  cmds.log  CUSTOMERS  topCustomers.txt  ws5.txt
+[julissa@sjsu Amazon Dataset]$ exit
+
+Script done on 2022-10-10 17:51:01-04:00
