@@ -1,13 +1,16 @@
-Script started on 2022-10-10 17:41:07-04:00
-[julissa@sjsu Amazon Dataset]$ head -1 amazon_reviews_us_Books_v1_02.tsv 
-marketplace	customer_id	review_id	product_id	product_parent	product_title	product_category	star_rating	helpful_votes	total_votes	vine	verified_purchase	review_headline	review_body	review_date
-[julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS
+Script started on 2022-10-13 04:18:47-04:00
+[julissa@sjsu Amazon Dataset]$ mkdir CUSTOMERS 
 [julissa@sjsu Amazon Dataset]$ ls
 amazon_reviews_us_Books_v1_02.tsv  CUSTOMERS  ws5.txt
 
 
 Create a file (topCustomers.txt) that contains the IDs of the top 1000 customers that made the most reviews.
----------------------Script output-------------------------
+cut command: get the second column (customer_id)
+sort: sort the ids
+uniq -c: count the unique instances
+sort -nr & awk commands: sort and print the ids by highest count
+head -1000: print the 1000 customer ids with the highest review count
+-------------------------------Script output-------------------------------
 [julissa@sjsu Amazon Dataset]$ cut -f2 amazon_reviews_us_Books_v1_02.tsv| sort | uniq -c| sort -nr | awk -F " " '{print $2}' | head -1000 > topCustomers.txt
 [julissa@sjsu Amazon Dataset]$ head -5 topCustomers.txt 
 50122160
@@ -17,27 +20,47 @@ Create a file (topCustomers.txt) that contains the IDs of the top 1000 customers
 50776149
 
 
-Inner awk command will print each review_id made by the customers in topCustomers.txt.
-The for loop creates a txt file for each review_id and places it in the CUSTOMERS directory.
----------------------Script output-------------------------
-[julissa@sjsu Amazon Dataset]$ for i in `awk 'NR==FNR{a[$1]++; next}{if($2 in a){print $3}}' topCustomers.txt amazon_reviews_us_Books_v1_02.tsv`; do touch CUSTOMERS/$i.txt; done
+For loop which will create the txt files for each customer ID found in the topCustomers.txt
+for each customer_id, create a text file named after the id and place it in the CUSTOMERS directory
+-------------------------------Script output-------------------------------
+[julissa@sjsu Amazon Dataset]$ for i in `cat topCustomers.txt`; do touch CUSTOMERS/$i.txt; done
 [julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
 [julissa@sjsu CUSTOMERS]$ ls -U | head -10
-RATOTLA3OF70O.txt
-R17026W0TBFZGL.txt
-R2W8C8DO33WTMP.txt
-RX6OWUF8EFZ72.txt
-R3NA5HUBCL94XV.txt
-R1OPUF771LL5O5.txt
-R27IOQ5TGEH30N.txt
-R3THZWOBS1086J.txt
-R2Q29SBAEO8YOH.txt
-R2D4XQKH128F3O.txt
-[julissa@sjsu CUSTOMERS]$ history > cmds.log
-[julissa@sjsu CUSTOMERS]$ mv cmds.log ..
+50122160.txt
+50732546.txt
+52615377.txt
+45041039.txt
+50776149.txt
+50913245.txt
+20595117.txt
+45273033.txt
+39569598.txt
+49693975.txt
 [julissa@sjsu CUSTOMERS]$ cd ..
+
+
+For loop which will append the reviewID to it's corresponding userID.txt
+for each customer_id, 
+	grep: output the matches with that customer_id from the dataset
+	awk: print the review_id and append it to the cutomer_id's txt file
+-------------------------------Script output-------------------------------
+[julissa@sjsu Amazon Dataset]$ for i in `cat topCustomers.txt `; do grep $i amazon_reviews_us_Books_v1_02.tsv | awk '{print $3}' >> CUSTOMERS/$i.txt ; done
+[julissa@sjsu Amazon Dataset]$ cd CUSTOMERS/
+[julissa@sjsu CUSTOMERS]$ head -10 50122160.txt
+R2D4XQKH128F3O
+R3CTHOBUQHSIUV
+R327XTBZOEFFFH
+R36ACJURUNHD38
+R3QP8VTFWA343T
+R2AFA24EIE8NP7
+RB6MW4F1NDHXB
+R35MFPL6N65AF5
+R3SKRU2RPW7KQ9
+RSMDXC4JO6U8J
+[julissa@sjsu CUSTOMERS]$ cd ..
+[julissa@sjsu Amazon Dataset]$ history > cmds.log
 [julissa@sjsu Amazon Dataset]$ ls
 amazon_reviews_us_Books_v1_02.tsv  cmds.log  CUSTOMERS  topCustomers.txt  ws5.txt
 [julissa@sjsu Amazon Dataset]$ exit
 
-Script done on 2022-10-10 17:51:01-04:00
+Script done on 2022-10-13 04:34:33-04:00
