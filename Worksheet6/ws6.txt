@@ -1,0 +1,50 @@
+Script started on 2022-10-18 23:55:26-04:00
+
+Part 1) get a current datetime stamp in a variable DATETIME
+--------------Script output------------------
+[julissa@sjsu julissa]$ export DATETIME=`date "+%Y-%m-%d_%H:%M:%S"`
+[julissa@sjsu julissa]$ echo $DATETIME
+2022-10-18_23:55:37
+
+
+Part 2)cp the file
+--------------Script output------------------
+[julissa@sjsu julissa]$ cp PRODUCTS/0811828964.txt PRODUCTS/0811828964.$DATETIME.txt
+[julissa@sjsu julissa]$ cd PRODUCTS/
+[julissa@sjsu PRODUCTS]$ ls
+0811828964.2022-10-18_23:55:37.txt  0811828964.txt
+[julissa@sjsu PRODUCTS]$ cd ..
+[julissa@sjsu julissa]$ cd PRODUCTS/
+
+
+Part 3)append a new row
+--------------Script output------------------
+[julissa@sjsu PRODUCTS]$ echo -e "maketplace\tcustomer\treview\tproduct\tparent\ttitle\tcategory\t3\thelpfulness\tvotes\tvines\tverified\tpurchase\theadline\tbody\tdate" >> 0811828964.$$DATETIME.txt
+[julissa@sjsu PRODUCTS]$ tail -1 0811828964.2022-10-18_23\:55\:37.txt 
+maketplace	customer	review	product	parent	title	category	3	helpfulness	votes	vines	verified	purchase	headline	body	date
+
+
+Part 4) create a symbolic link
+--------------Script output------------------
+[julissa@sjsu PRODUCTS]$ ln -s 0811828964.$DATETIME.txt 0811828964.LATEST.txt 
+[julissa@sjsu PRODUCTS]$ ls -altr
+total 96
+-rw-rw-r-- 1 julissa julissa 44720 Oct 18 23:49 0811828964.txt
+drwxr-xr-x 4 julissa root     4096 Oct 18 23:55 [0m[38;5;33m..[0m
+-rw-rw-r-- 1 julissa julissa 44840 Oct 18 23:57 0811828964.2022-10-18_23:55:37.txt
+lrwxrwxrwx 1 julissa julissa    34 Oct 19 00:01 [38;5;51m0811828964.LATEST.txt[0m -> 0811828964.2022-10-18_23:55:37.txt
+drwxrwxr-x 2 julissa julissa  4096 Oct 19 00:01 [38;5;33m.[0m
+
+
+Part 5) Write a cron tab
+--------------Script output------------------
+[julissa@sjsu PRODUCTS]$ crontab -e
+no crontab for julissa - using an empty one
+* * * * * cut -f8 PRODUCTS/0811828964.LATEST.txt | awk '{sum += [?25h[?25l[25;1H[K[1;65H$1} END {print sum/NR}' > PRODUCTS/0811828964.AVGRATING.txt[?25h[?25l[25;1H:[?2004h[?25hwq[?25l[?2004l"/tmp/crontab.uoQ6DK" 1L, 124C written
+[?2004l[?1l>[?25h[?1049l[23;0;0tcrontab: installing new crontab
+[julissa@sjsu PRODUCTS]$ crontab -l
+* * * * * cut -f8 PRODUCTS/0811828964.LATEST.txt | awk '{sum += $1} END {print sum/NR}' > PRODUCTS/0811828964.AVGRATING.txt
+[julissa@sjsu PRODUCTS]$ history > cmds.log
+[julissa@sjsu PRODUCTS]$ exit
+
+Script done on 2022-10-19 00:11:17-04:00
