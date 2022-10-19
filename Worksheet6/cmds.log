@@ -1,0 +1,14 @@
+  986  export DATETIME=`date "+%Y-%m-%d_%H:%M:%S"`
+  987  echo $DATETIME
+  988  cp PRODUCTS/0811828964.txt PRODUCTS/0811828964.$DATETIME.txt
+  989  cd PRODUCTS/
+  990  ls
+  991  cd ..
+  992  cd PRODUCTS/
+  993  echo -e "maketplace\tcustomer\treview\tproduct\tparent\ttitle\tcategory\t3\thelpfulness\tvotes\tvines\tverified\tpurchase\theadline\tbody\tdate" >> 0811828964.$DATETIME.txt
+  994  tail -1 0811828964.2022-10-18_23\:55\:37.txt 
+  995  ln -s 0811828964.$DATETIME.txt 0811828964.LATEST.txt 
+  996  ls -altr
+  997  crontab -e
+  998  crontab -l
+  999  history > cmds.log
