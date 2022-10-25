@@ -184,15 +184,21 @@ ontario
 Question 5
 ---------------------Script output-------------------------
 // Based on the retweets_subset_data.csv, I chose to analyze user '1003107003693137921' and their relationships
-// I used these commands to create a csv then used Gephi to the network cluster (retweetGraph.svg)
-[julissa@sjsu TwitterData]$ touch relationships.csv
-[julissa@sjsu TwitterData]$ echo "Source,Target" >> relationships.csv
-[julissa@sjsu TwitterData]$ awk -F "," '$1=='1003107003693137921'{print}' authorWhoGotRetweeted_userWhoRetweeted.csv >> relationships.csv
+// I used these commands to create a csv then used Gephi to create the network cluster (retweetGraph.svg)
+ touch relationships.csv
+ echo "Source,Target" >> relationships.csv
+ awk -F "," '$1=='1003107003693137921'{print}' retweets_subset_data.csv >> relationships.csv
 
-
+// Based on the replies_subset_data.csv from A3, I chose to analyze user '1108565574' and their relationships
+// I used these commands to create a csv then used Gephi to create the network cluster (replytGraph.svg)
+ touch relationships2.csv
+ echo "Source,Target" >> relationships2.csv
+ awk -F "," '$1=='1108565574'{print}' replies_subset_data.csv >> relationships.csv
+ 
 Question 6
 ---------------------Script output-------------------------
-retweetGraph.svg shows a directed graph that shows relationships between user '1003107003693137921' and other users who retweeted them.
+retweetGraph.svg is a directed graph that shows relationships between user '1003107003693137921' and other users who retweeted them.
+replyGraph.svg is a directed graph that shows relationships between user '1108565574' and users that replied to them. 
 
 
 [julissa@sjsu TwitterData]$ exit
