@@ -1,0 +1,184 @@
+Script started on 2022-10-23 13:05:59-04:00
+
+// Created original_tweetIDs_authors.tsv for easy access to find the rewteeted ID and author ID of who wrote it
+[julissa@sjsu TwitterData]$ cut -f1,2 downloaded_tweets_extend_original_nolf2a.tsv > original_tweetIDs_authors.tsv
+
+Notes/Comments/Observations
+retweet_IDs.txt   -> 43985 unique retweet IDs were found in downloaded_tweets_extend_nolf2a.tsv
+retweetsFound.txt -> 43531 of those unique retweeted IDs were found in downloaded_tweets_extend_original_nolf2a.tsv
+Since we need the authors of the retweets, I will use retweetsFound.txt which contains retweet IDs
+found in downloaded_tweets_extend_original_nolf2a.tsv(file with ID and author)
+----------------------------------------------
+[julissa@sjsu TwitterData]$ grep "type=retweeted" downloaded_tweets_extend_nolf2a.tsv | awk -F '\t' '{print $5}' | sed "s/^.* id=//g" |sed "s/ type=retwweeted\]//g" | sort | uniq -c | awk '{print $2}' | sort > retweet_IDs.txt
+[julissa@sjsu TwitterData]$ wc retweet_IDs.txt 
+ 43985  43984 879661 retweet_IDs.txt
+[julissa@sjsu TwitterData]$ fgrep -f  retweet_IDs.txt original_tweetIDs_authors.tsv | awk -F '\t' '{print $1}' > retweetsFound.txt
+[julissa@sjsu TwitterData]$ wc retweetsFound.txt
+ 43531  43536 870481 retweetsFound.txt
+
+
+QUESTION 0
+---------------------Script output-------------------------
+[julissa@sjsu TwitterData]$ fgrep -f  retweetsFound.txt original_tweetIDs_authors.tsv | awk -F '\t' '{print $2}' > users_that_were_retweeted.txt
+[julissa@sjsu TwitterData]$ wc users_that_were_retweeted.txt 
+ 43531  43527 580128 users_that_were_retweeted.txt
+[julissa@sjsu TwitterData]$ sort users_that_were_retweeted.txt | uniq -c | sort -nr | head -10 | awk '{print $2}'
+18831926
+1891490382
+163018653
+1495480590572961792
+1231514832479948802
+1219232377605644289
+42836999
+1229752606714728454
+380648579
+1290232189615894531
+
+
+QUESTION 1
+---------------------Script output-------------------------
+[julissa@sjsu TwitterData]$ cut -f1,5 downloaded_tweets_extend_nolf2a.tsv | sed "s/\[<ReferencedTweet id=//g" | sed "s/ type=retweeted\]//g"> temp1.tsv 
+[julissa@sjsu TwitterData]$ awk -F'\t' 'NR==FNR{a[$1]; next}{if($2 in a){print}}' retweetsFound.txt temp1.tsv | awk '$2{print}' > temp2.tsv
+[julissa@sjsu TwitterData]$ head -2 temp2.tsv 
+1520503332246376448	1513654494504136709
+1520503283470815232	1513774168348704770
+	
+	//Get the user who retweeted and the retweetID
+	//Remove any duplicate combinations of user who retweeted + retweetedID 
+[julissa@sjsu TwitterData]$ sort temp2.tsv | uniq -c | sort -r | awk '{print $2"\t"$3}' | sort -k2 > author_who_retweeted_and_retweetID.tsv
+[julissa@sjsu TwitterData]$ head -2 author_who_retweeted_and_retweetID.tsv 
+1483863304510398466	1004656199885836288
+1497921901079019529	1017456403961835520
+[julissa@sjsu TwitterData]$ rm temp1.tsv
+[julissa@sjsu TwitterData]$ rm temp2.tsv
+	
+	//Get the the retweetID and the author of the retweet (person who wrote it)
+[julissa@sjsu TwitterData]$ fgrep -f  retweetsFound.txt original_tweetIDs_authors.tsv | awk -F '\t' '{print}' > retweetedID_and_author_who_got_retweeted.tsv
+[julissa@sjsu TwitterData]$ wc author_who_retweeted_and_retweetID.tsv 
+  48250   96500 1929752 author_who_retweeted_and_retweetID.tsv
+[julissa@sjsu TwitterData]$ wc retweetedID_and_author_who_got_retweeted.tsv 
+  43531   87063 1450609 retweetedID_and_author_who_got_retweeted.tsv
+	
+	Notes/Comments/Observations
+        // author_who_retweeted_and_retweetID.tsv       -> 48250 lines
+        // retweetedID_and_author_who_got_retweeted.tsv -> 43531 lines
+        // This means some tweets in the first file were retweeted by various users
+
+	// Create csv that contains author who got retweeted (A_ID) and the user who retweeted them (B_ID)
+[julissa@sjsu TwitterData]$ echo 'A_ID,B_ID' > authorWhoGotRetweeted_userWhoRetweeted.csv
+[julissa@sjsu TwitterData]$ awk 'NR==FNR {id[$1]=$2; next } ($2 in id){ print id[$2]","$1}' retweetedID_and_author_who_got_retweeted.tsv author_who_retweeted__and_retweetID.tsv >> authorWhoGotRetweeted_userWhoRetweeted.csv
+
+	// authorWhoGotRetweeted_userWhoRetweeted.csv -> 48250 lines
+	// this reflects what we expect since author_who_retweeted_and_retweetID.tsv was 48250 lines
+[julissa@sjsu TwitterData]$ wc authorWhoGotRetweeted_userWhoRetweeted.csv 
+  48250   48250 1603502 authorWhoGotRetweeted_userWhoRetweeted.csv
+[julissa@sjsu TwitterData]$ head -2 authorWhoGotRetweeted_userWhoRetweeted.csv 
+457060718,1483863304510398466
+140496030,1497921901079019529
+
+
+QUESTION 2
+---------------------Script output-------------------------
+	//If author got 3 or more retweets, include them in search_file.txt
+[julissa@sjsu TwitterData]$ awk -F ',' '{print $1}' authorWhoGotRetweeted_userWhoRetweeted.csv | sort | uniq -c | awk '$1>=3{print $2 ","}' > search_file.txt 
+	
+	//Create the cluster of authors with 3 or more retweets + the person who retweeted them -> retweets_subset_data.csv
+[julissa@sjsu TwitterData]$ awk -F',' 'NR==FNR{a[$1]; next}{if($1 in a){print}}' search_file.txt authorWhoGotRetweeted_userWhoRetweeted.csv | sort > retweets_subset_data.csv
+[julissa@sjsu TwitterData]$ head retweets_subset_data.csv 
+1001228776032763905,1481140098393513987
+1001228776032763905,1481140426233225217
+1001228776032763905,1481140681913475074
+1001228776032763905,1481142919704702976
+1001228776032763905,1481143126295134208
+1003107003693137921,1477274285404266497
+1003107003693137921,1477852858313674752
+1003107003693137921,1478829434475978754
+1003107003693137921,1478829523151974403
+1003107003693137921,1478939996824510464
+
+
+QUESTION 3
+---------------------Script output-------------------------
+	//Create the data for the histogram and plot
+[julissa@sjsu TwitterData]$ awk -F ',' '{print $1}' retweets_subset_data.csv | uniq -c | sort -k1 -n -t, | awk -F " " '{print $1}' | uniq -c > histogram_data.txt
+[julissa@sjsu TwitterData]$ /etc/gnuplot-5.4.4/src/gnuplot
+
+	G N U P L O T
+	Version 5.4 patchlevel 4    last modified 2022-07-10 
+
+	Copyright (C) 1986-1993, 1998, 2004, 2007-2022
+	Thomas Williams, Colin Kelley and many others
+
+	gnuplot home:     http://www.gnuplot.info
+	faq, bugs, etc:   type "help FAQ"
+	immediate help:   type "help"  (plot window: hit 'h')
+
+Terminal type is now 'unknown'
+gnuplot> set output "clusterInfo.svg"
+gnuplot> set style data histograms
+gnuplot> set xlabel "Cluster size"
+gnuplot> set ylabel "Number  of clusters"
+gnuplot> plot './histogram_data.txt' using 1:xtic(2)
+WARNING: Plotting with an 'unknown' terminal.
+No output will be generated. Please select a terminal with 'set terminal'.
+gnuplot> set terminal svg
+
+Terminal type is now 'svg'
+Options are 'size 600,480 fixed enhanced font 'Arial,12' butt dashlength 1.0 '
+gnuplot> plot './histogram_data.txt' using 1:xtic(2)
+gnuplot> exit
+
+
+QUESTION 4
+---------------------Script output-------------------------
+	//Get the top 30 hashtags used by authors who got retweeted 3 or more times
+[julissa@sjsu TwitterData]$ awk  -F ',' '{print $1}' search_file.txt > received_3_or_more_retweets.txt
+[julissa@sjsu TwitterData]$ fgrep -f received_3_or_more_retweets.txt downloaded_tweets_extend_nolf2a.tsv | cut -f4 -d$'\t' | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr |head -30 > cluster_top30Hashtags.txt
+
+	//Get the top 30 hashtags used authors who got retweeted
+[julissa@sjsu TwitterData]$ awk -F ',' '{print $1}' authorWhoGotRetweeted_userWhoRetweeted.csv > got_retweeted.txt
+[julissa@sjsu TwitterData]$ fgrep -f got_retweeted.txt downloaded_tweets_extend_nolf2a.tsv | cut -f4 -d$'\t' | tr -d '"' |tr ',' '\n' | sed '/^$/d' | tr  [:upper:] [:lower:] | sort | uniq -c | sort -nr |head -30 > overall_top30Hashtags.txt
+
+	//Compare the hashtags used in the tweets 
+[julissa@sjsu TwitterData]$ awk -F " " '{print $2}' cluster_top30Hashtags.txt | sort > cluster.txt
+[julissa@sjsu TwitterData]$ awk -F " " '{print $2}' overall_top30Hashtags.txt | sort > overall.txt
+[julissa@sjsu TwitterData]$ comm cluster.txt overall.txt
+
+//Left side are the hashtags found in the cluster but not overall
+//Middle are the hashtags found in the overall in the cluster
+//Right are the hashtags found in both
+		ableg
+		apartheid
+		bced
+		bcpoli
+		boycottrussia
+cdnpoli
+		covid
+		covid19
+		covid19ab
+		covid19bc
+		covidisairborne
+		fbpe
+		followbackfriday
+		genocide
+		longcovid
+		nevervoteconservative
+		omicron
+		onpoli
+ontario
+		ottawa
+	partygate
+	pmqs
+		putin
+		putinhitler
+		putinwarcriminal
+		russia
+		russian
+		russiasanctions
+		standwithukraine
+		stopputinnow
+		ukraine
+		votefordout
+[julissa@sjsu TwitterData]$ exit
+
+Script done on 2022-10-23 13:20:36-04:00
