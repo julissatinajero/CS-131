@@ -145,7 +145,7 @@ QUESTION 4
 [julissa@sjsu TwitterData]$ comm cluster.txt overall.txt
 
 //Left side are the hashtags found in the cluster but not overall
-//Middle are the hashtags found in the overall in the cluster
+//Middle are the hashtags found in the overall hashtags but not in the cluster
 //Right are the hashtags found in both
 		ableg
 		apartheid
@@ -179,6 +179,22 @@ ontario
 		stopputinnow
 		ukraine
 		votefordout
+
+
+Question 5
+---------------------Script output-------------------------
+// Based on the retweets_subset_data.csv, I chose to analyze user '1003107003693137921' and their relationships
+// I used these commands to create a csv then used Gephi to the network cluster (retweetGraph.svg)
+[julissa@sjsu TwitterData]$ touch relationships.csv
+[julissa@sjsu TwitterData]$ echo "Source,Target" >> relationships.csv
+[julissa@sjsu TwitterData]$ awk -F "," '$1=='1003107003693137921'{print}' authorWhoGotRetweeted_userWhoRetweeted.csv >> relationships.csv
+
+
+Question 6
+---------------------Script output-------------------------
+retweetGraph.svg shows a directed graph that shows relationships between user '1003107003693137921' and other users who retweeted them.
+
+
 [julissa@sjsu TwitterData]$ exit
 
 Script done on 2022-10-23 13:20:36-04:00
