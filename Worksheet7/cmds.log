@@ -1,0 +1,6 @@
+  992  ls
+  993  cut -f14 0811828964.txt > reviewBody_0811828964.txt
+  994  head -3 reviewBody_0811828964.txt 
+  995  sed 's/[,.;]//g' reviewBody_0811828964.txt | sed -r 's/\b(and|or|if|in|it)\b//gI' | sed 's/<[^>]*>//g' > edited_0811828964.txt
+  996  head -3 edited_0811828964.txt 
+  997  history > cmds.log
