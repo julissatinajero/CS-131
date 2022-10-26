@@ -1,4 +1,9 @@
 Script started on 2022-10-25 23:36:05-04:00
+
+// I used these two websites to help create the commands I used
+// https://stackoverflow.com/questions/24127301/deleting-multiple-words-from-a-file-using-terminal
+// https://stackoverflow.com/questions/19878056/sed-remove-tags-from-html-file
+
 [julissa@sjsu AmazonData]$ ls
 0811828964.txt  amazon_reviews_us_Books_v1_02.tsv  ws7.txt
 
@@ -14,9 +19,10 @@ This book is the perfect summer read - light, funny, entertaining, sometimes ins
 [julissa@sjsu AmazonData]$ 
  
 
-//first sed command  -> remove comma, dot, & semicolon
-//second sed command -> remove instances of the words and, or, if, in, & it (case insensitive)
-//third sed command  -> remove html tags 
+// first sed command  -> remove comma, dot, & semicolon
+// second sed command -> remove instances of the words and, or, if, in, & it (case insensitive)
+// third sed command  -> remove html tags 
+// Looking at the 3 top review bodies, we can see that all of the above were removed.
 ---------------------Script output-------------------------
 [julissa@sjsu AmazonData]$ sed 's/[,.;]//g' reviewBody_0811828964.txt | sed -r 's/\b(and|or|if|in|it)\b//gI' | sed 's/<[^>]*>//g' > edited_0811828964.txt
 [julissa@sjsu AmazonData]$ head -3 edited_0811828964.txt 
