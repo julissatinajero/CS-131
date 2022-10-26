@@ -1,0 +1,29 @@
+Script started on 2022-10-25 23:36:05-04:00
+[julissa@sjsu AmazonData]$ ls
+0811828964.txt  amazon_reviews_us_Books_v1_02.tsv  ws7.txt
+
+
+// I chose product '0811828964'
+// For easy access to the review body, I cut the review_body column and placed it in reviewBody_0811828964.txt
+---------------------Script output-------------------------
+[julissa@sjsu AmazonData]$ cut -f14 0811828964.txt > reviewBody_0811828964.txt
+[julissa@sjsu AmazonData]$ head -3 reviewBody_0811828964.txt 
+If you are looking for something to stimulate your brain, this isn't it.  However, if you are just looking for a good laugh, you'll enjoy The Bad Girl's Guide.  It's funny and light, and definitely a good way to pass a little bit of time.
+It's nice to have a cheeky-style self-help book.  Tuttle's irreverence is refreshing and a couple of her lines made me laugh.  Nonetheless, it's forgettable nonsense and at $14, a tad too expensive for what is offered the reader.
+This book is the perfect summer read - light, funny, entertaining, sometimes inspiring.  You can pick it up at any point in the book and begin reading, forget about marking your page, it's not that kind of book.   <br /> <br />I can't wait to read Cameron Tuttle's other Bad Girl books - Viva la Bad Girl!
+[julissa@sjsu AmazonData]$ 
+ 
+
+//first sed command  -> remove comma, dot, & semicolon
+//second sed command -> remove instances of the words and, or, if, in, & it (case insensitive)
+//third sed command  -> remove html tags 
+---------------------Script output-------------------------
+[julissa@sjsu AmazonData]$ sed 's/[,.;]//g' reviewBody_0811828964.txt | sed -r 's/\b(and|or|if|in|it)\b//gI' | sed 's/<[^>]*>//g' > edited_0811828964.txt
+[julissa@sjsu AmazonData]$ head -3 edited_0811828964.txt 
+ you are looking for something to stimulate your brain this isn't   However  you are just looking for a good laugh you'll enjoy The Bad Girl's Guide  's funny  light  definitely a good way to pass a little bit of time
+'s nice to have a cheeky-style self-help book  Tuttle's irreverence is refreshing  a couple of her lines made me laugh  Nonetheless 's forgettable nonsense  at $14 a tad too expensive for what is offered the reader
+This book is the perfect summer read - light funny entertaining sometimes inspiring  You can pick  up at any point  the book  begin reading forget about marking your page 's not that kind of book    I can't wait to read Cameron Tuttle's other Bad Girl books - Viva la Bad Girl!
+[julissa@sjsu AmazonData]$ history > cmds.log
+[julissa@sjsu AmazonData]$ exit
+
+Script done on 2022-10-25 23:40:12-04:00
