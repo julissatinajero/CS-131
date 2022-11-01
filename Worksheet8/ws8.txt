@@ -48,6 +48,7 @@ for
 TASKS:
 Find the 10 most frequent words in the review_body of the verified reviews
 Find the 10 most frequent words in the review_body of the unverified reviews
+Note: I checked the frequency for 500 reviews to save time because the files were large.
 -------------------Script output-------------------
 [julissa@sjsu AmazonData]$ awk -F '\t' '{print $14}' verified.txt | head -500 | sed 's/\s/\n/g' | fgrep -v -w -f exclude.txt |sort | uniq -c | sort -nr | head -10 
     668 book
