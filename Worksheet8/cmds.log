@@ -1,0 +1,9 @@
+  992  awk -F '\t' '$12 == "Y" {print}'  amazon_reviews_us_Books_v1_02.tsv > verified.txt
+  993  awk -F '\t' '$12 == "N" {print}'  amazon_reviews_us_Books_v1_02.tsv > unverified.txt
+  994  head -2 verified.txt 
+  995  head -2 unverified.txt 
+  996  cat exclude.txt 
+  997  awk -F '\t' '{print $14}' verified.txt | head -500 | sed 's/\s/\n/g' | fgrep -v -w -f exclude.txt |sort | uniq -c | sort -nr | head -10 
+  998  awk -F '\t' '{print $14}' unverified.txt | head -500 | sed 's/\s/\n/g' | fgrep -v -w -f exclude.txt |sort | uniq -c | sort -nr | head -10 
+  999  vi exclude.txt 
+ 1000  history > cmds.log
