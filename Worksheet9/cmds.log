@@ -1,0 +1,8 @@
+ 1000  vi randomsample.sh
+ 1001  cat randomsample.sh 
+ 1002  chmod 777 randomsample.sh
+ 1003  head -n 1000 amazon_reviews_us_Books_v1_02.tsv > amazon_subset.tsv
+ 1004  ./randomsample.sh
+ 1005  ./randomsample.sh 15
+ 1006  ./randomsample.sh 5 amazon_subset.tsv 
+ 1007  history > cmds.log
