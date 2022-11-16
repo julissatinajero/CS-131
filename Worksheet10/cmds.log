@@ -1,0 +1,7 @@
+ 1000  ls
+ 1001  vi numbers.sh
+ 1002  cat numbers.sh 
+ 1003  chmod 777 numbers.sh
+ 1004  time ./numbers.sh
+ 1005  time python3 numbers.py
+ 1006  history > cmds.log
