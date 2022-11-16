@@ -1,0 +1,33 @@
+Script started on 2022-11-15 21:13:39-05:00
+
+Reference for awk command used:http://www.d0wn.com/using-awk-to-display-the-min-the-max-and-the-average-of-a-list/
+
+[julissa@sjsu AmazonData]$ ls
+amazon_reviews_us_Books_v1_02.tsv  numbers.py  ws10.txt
+[julissa@sjsu AmazonData]$ vi numbers.sh
+[julissa@sjsu AmazonData]$ cat numbers.sh
+#!/bin/bash
+tail -n +2 amazon_reviews_us_Books_v1_02.tsv | awk -F '\t' '{if(min==""){min=max=$9}; if($9>max) {max=$9}; if($9<min) {min=$9}; total+=$9; count+=1} END {print "min " min," max "max, " avg " total/count}'
+[julissa@sjsu AmazonData]$ 
+[julissa@sjsu AmazonData]$ chmod 777 numbers.sh
+[julissa@sjsu AmazonData]$ time ./numbers.sh
+min 0  max 15835  avg 9.33468
+
+real	0m20.570s
+user	0m20.899s
+sys	0m1.486s
+[julissa@sjsu AmazonData]$ time python3 numbers.py
+min 0 max 15835 avg 9.33467921636312
+
+real	0m19.213s
+user	0m18.602s
+sys	0m0.610s
+[julissa@sjsu AmazonData]$ history > cmds.log
+[julissa@sjsu AmazonData]$ exit
+
+It appears that the python program ran slightly faster than the shell script. 
+The Python program took 19.21 seconds to finish executing and the shell script
+took 20.57 to finish executing.
+
+
+Script done on 2022-11-15 21:15:10-05:00
