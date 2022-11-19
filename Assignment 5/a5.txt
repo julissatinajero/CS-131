@@ -1,0 +1,109 @@
+Script started on 2022-11-19 05:47:56-05:00
+
+----- REPLIES -----
+
+Get replies from the original data and remove bots
+Create a list of influences based on the replies (received 3 or more replies)
+---------------------Script output-------------------------
+[julissa@sjsu DATA]$ grep replied_to downloaded_tweets_extend_original_nolf2.tsv | awk -F "\t" '($2 != $6) {print}' > downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv
+[julissa@sjsu DATA]$ grep replied_to downloaded_tweets_extend_nolf2.tsv | awk -F "\t" '($2 != $6) {print}' > downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsv
+[julissa@sjsu DATA]$ awk -F "\t" '{print $6}' downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv | sort | uniq -c | sort -n -k 1 | awk '($1 >=3) {print $2}' > influencers.REPLY.NOBOTS.txt
+[julissa@sjsu DATA]$ awk -F "\t" '{print $6}' downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsv | sort | uniq -c | sort -n -k 1 | awk '($1 >=3) {print $2}' >> influencers.REPLY.NOBOTS.txt
+[julissa@sjsu DATA]$ wc influencers.REPLY.NOBOTS.txt
+ 401  401 5089 influencers.REPLY.NOBOTS.txt
+[julissa@sjsu DATA]$ mv downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsv influencers.REPLY.NOBOTS.txt ..
+[julissa@sjsu DATA]$ cd ..
+[julissa@sjsu A5]$ ls
+DATA  downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv  users_retweeted_3_or_more_times.txt
+downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsv  influencers.REPLY.NOBOTS.txt                                
+
+
+Create a file for each influencer containing their hashtags
+---------------------Script output-------------------------
+[julissa@sjsu A5]$ mkdir infl_replies
+[julissa@sjsu A5]$ for INFL in `cat influencers.REPLY.NOBOTS.txt `; do grep $INFL downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv downloaded_tweets_extend_nolf2_REPLIEDD_NOBOTS.tsv | awk -F "\t" '{print $4}' | tr ',' '\n' | sed 's/\"//g' | tr [:upper:] [:lower:] > infl_replies/$INFL.hashtags; done
+[julissa@sjsu A5]$ cd infl_replies/
+[julissa@sjsu infl_replies]$ ls -U | head -5
+2598999181.hashtags
+1449377648229195779.hashtags
+73397322.hashtags
+351120282.hashtags
+7587032.hashtags
+[julissa@sjsu infl_replies]$ ls| wc
+    368     368    7992
+
+
+Get the total count of hashtags in the entire dataset
+Total = 3928 + 12702 = 16630
+---------------------Script output-------------------------
+[julissa@sjsu infl_replies]$ cut -f4 -d$'\t' ../downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv | tr ',' '\n' | wc -l
+3928
+[julissa@sjsu infl_replies]$ cut -f4 -d$'\t' ../downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsv | tr ',' '\n' | sed 's/\"//g' | wc -l
+12702
+
+
+Create TSV file containing information on the frequencies
+---------------------Script output-------------------------
+[julissa@sjsu infl_replies]$ for FILE in `ls | grep -v replies_hashtag_freqs.tsv`; do for HASHTAG in `cat $FILE`; do count_H_in_C=`grep $HASHTAG $FILE | wc -l`; count_hashtags_in__C=`cat $FILE | wc -l`; count_H_entire_dataset=`grep -i $HASHTAG ../downloaded_tweets_extend_original_nolf2_REPLIED_NOBOTS.tsv ../downloaded_tweets_extend_nolf2_REPLIED_NOBOTS.tsvv | wc -l`; count_hashtags_entire_dataset=3928; frequency_H_in_C=`echo "$count_H_in_C / $count_hashtags_in_C" | bc -l`; frequency_H_overall=`echo "$count_H_entire_dataset / $countt_hashtags_entire_dataset" | bc -l`; relative_frequency_H_C=`echo "$frequency_H_in_C / $frequency_H_overall" | bc -l`; echo "$HASHTAG $FILE $relative_frequency_H_C $frequency_H_inn_C $frequency_H_overall $count_H_in_C $count_hashtags_in_C $count_H_entire_dataset $count_hashtags_entire_dataset"; done; done > replies_hashtag_freqs.tsv
+[julissa@sjsu infl_replies]$ 
+[julissa@sjsu infl_replies]$ 
+[julissa@sjsu infl_replies]$ 
+[julissa@sjsu infl_replies]$ head -3 replies_hashtag_freqs.tsv
+justicematters 1003107003693137921.hashtags 178.54545454545454591816 .54545454545454545454 .00305498981670061099 6 11 12 3928
+justicematters 1003107003693137921.hashtags 178.54545454545454591816 .54545454545454545454 .00305498981670061099 6 11 12 3928
+justicematters 1003107003693137921.hashtags 178.54545454545454591816 .54545454545454545454 .00305498981670061099 6 11 12 3928
+[julissa@sjsu infl_replies]$ wc -l replies_hashtag_freqs.tsv
+6385 replies_hashtag_freqs.tsv
+[julissa@sjsu infl_replies]$ cd ..
+
+
+----- RETWEETS -----
+
+Notes:
+   downloaded_tweets_extend_original_nolf2.tsv does not contain retweet info
+   downloaded_tweets_extend_nolf2 contains the users who got retweeted
+   users_retweeted_3_or_more_times.txt was I file I created in A4 which I used
+   in this assignment to get the users who were retweeted 3 or more times
+
+Create files with bots removed
+---------------------Script output-------------------------
+[julissa@sjsu A5]$ cd DATA/
+[julissa@sjsu DATA]$ grep type=retweeted downloaded_tweets_extend_original_nolf2.tsv | wc
+      0       0       0
+[julissa@sjsu DATA]$ awk -F "\t" '($2 != $6) {print}' downloaded_tweets_extend_original_nolf2.tsv > downloaded_tweets_extend_original_nolf2_NOBOTS.tsv
+[julissa@sjsu DATA]$ grep type=retweeted downloaded_tweets_extend_original_nolf2.tsv | wc
+  48954 1377697 13159997
+[julissa@sjsu DATA]$ grep type=retweeted downloaded_tweets_extend_nolf2.tsv | awk -F "\t" '($2 != $6) {print}' > downloaded_tweets_extend_nolf2_RETWEETS_NOBOTS.tsv
+[julissa@sjsu DATA]$ mv downloaded_tweets_extend_original_nolf2_NOBOTS.tsv downloaded_tweets_extend_nolf2_RETWEETS_NOBOTS.tsv >>..
+[julissa@sjsu DATA]$ cd ..
+[julissa@sjsu A5]$ wc -l users_retweeted_3_or_more_times.txt
+3106 users_retweeted_3_or_more_times.txt
+[julissa@sjsu A5]$ head -3 users_retweeted_3_or_more_times.txt
+1001228776032763905
+1003107003693137921
+1003662615661436929
+
+
+Create a file for each influencer containing their hashtags
+---------------------Script output-------------------------
+[julissa@sjsu A5]$ mkdir infl_retweets
+[julissa@sjsu A5]$ for INFL in `cat users_retweeted_3_or_more_times.txt`; do grep $INFL downloaded_tweets_extend_original_nolf2_NOBOTS.tsv | awk -F "\t" '{print $4}' | tr ',' '\n'' | sed 's/\"//g' | tr [:upper:] [:lower:] > infl_retweets/$INFL.hashtags; done
+[julissa@sjsu A5]$ cd infl_retweets/
+[julissa@sjsu infl_retweets]$ ls -U | head -5
+948961748261810176.hashtags
+19489239.hashtags
+835552373615493120.hashtags
+810282809482944512.hashtags
+71686324.hashtags
+
+
+Create TSV file containing information on the frequencies
+---------------------Script output-------------------------
+[julissa@sjsu infl_retweets]$ for FILE in `ls | grep -v retweets_hashtag_freqs.tsv`; do for HASHTAG in `cat $FILE`; do count_H_in_C=`grep $HASHTAG $FILE | wc -l`; count_hashtags_iin_C=`cat $FILE | wc -l`; count_H_entire_dataset=`grep -i $HASHTAG ../downloaded_tweets_extend_original_nolf2_NOBOTS.tsv ../downloaded_tweets_extend_nolf2_RETWEETS_NOBOTS.tsv| wc  -l`; count_hashtags_entire_dataset=3928; frequency_H_in_C=`echo "$count_H_in_C / $count_hashtags_in_C" | bc -l`; frequency_H_overall=`echo "$count_H_entire_dataset / $count_hashttags_entire_dataset" | bc -l`; relative_frequency_H_C=`echo "$frequency_H_in_C / $frequency_H_overall" | bc -l`; echo "$HASHTAG $FILE $relative_frequency_H_C $frequency_H_in_C $frrequency_H_overall $count_H_in_C $count_hashtags_in_C $count_H_entire_dataset $count_hashtags_entire_dataset"; done; done > retweets_hashtag_freqs.tsv
+
+
+[julissa@sjsu infl_retweets]$ wc -l retweets_hashtag_freqs.tsv
+5443 retweets_hashtag_freqs.tsv
+[julissa@sjsu infl_retweets]$ exit
+
+Script done on 2022-11-19 06:02:26-05:00
